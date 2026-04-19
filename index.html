@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nissan Purwakarta — Dealer Resmi &amp; Service Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            nissan: {
+              red:   '#C3002F',
+              dark:  '#1a1a2e',
+              gray:  '#f8f9fa',
+            }
+          },
+          backdropBlur: { xs: '2px' }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/743/743007.png"/>
+</head>
+<body class="font-sans bg-white text-gray-800 antialiased">
+
+  <!-- ═══════════════════════════════════════════
+       STICKY NAVBAR — frosted glass effect
+  ═══════════════════════════════════════════ -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="background: rgba(255,255,255,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(0,0,0,0.06);">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
+
+      <!-- Brand -->
+      <a href="#hero" class="flex items-center gap-3 group">
+        <!-- Nissan logo inline SVG — always renders, no external dependency -->
+        <svg height="32" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Nissan logo">
+          <ellipse cx="100" cy="30" rx="98" ry="28" stroke="#C3002F" stroke-width="4" fill="none"/>
+          <rect x="2" y="22" width="196" height="16" fill="white"/>
+          <text x="100" y="35" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="22" letter-spacing="6" fill="#C3002F">NISSAN</text>
+        </svg>
+        <div class="leading-tight">
+          <span class="block text-base font-800 text-gray-900 tracking-tight" style="font-weight:800;">Nissan Purwakarta</span>
+          <span class="block text-[10px] font-medium text-gray-400 uppercase tracking-widest">Dealer Resmi &amp; Service Center</span>
+        </div>
+      </a>
+
+      <!-- Desktop nav -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#hero"     class="nav-link text-sm font-semibold text-gray-600 hover:text-red-600 transition-colors duration-200">Beranda</a>
+        <a href="#models"   class="nav-link text-sm font-semibold text-gray-600 hover:text-red-600 transition-colors duration-200">Model</a>
+        <a href="#services" class="nav-link text-sm font-semibold text-gray-600 hover:text-red-600 transition-colors duration-200">Layanan</a>
+        <a href="#contact"  class="nav-link text-sm font-semibold text-gray-600 hover:text-red-600 transition-colors duration-200">Kontak</a>
+        <a href="tel:082219120005"
+           class="ml-2 inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+          </svg>
+          Hubungi Kami
+        </a>
+      </div>
+
+      <!-- Mobile CTA -->
+      <a href="tel:082219120005"
+         class="md:hidden inline-flex items-center gap-1.5 bg-red-600 text-white text-xs font-bold px-4 py-2 rounded-full">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+        </svg>
+        Hubungi
+      </a>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════
+       HERO SECTION — full-width with dark overlay
+  ═══════════════════════════════════════════ -->
+  <section id="hero" class="relative min-h-screen flex items-center overflow-hidden">
+
+    <!-- Background image — Nissan SUV on open road -->
+    <div class="absolute inset-0">
+      <img
+        src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1920&auto=format&fit=crop"
+        alt="Nissan SUV"
+        class="w-full h-full object-cover object-center"
+      >
+      <!-- Multi-layer dark overlay for readability -->
+      <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(10,10,20,0.82) 0%, rgba(10,10,20,0.55) 60%, rgba(10,10,20,0.35) 100%);"></div>
+      <!-- Subtle red accent gradient at bottom -->
+      <div class="absolute bottom-0 left-0 right-0 h-32" style="background: linear-gradient(to top, rgba(195,0,47,0.18), transparent);"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20 w-full">
+      <div class="max-w-2xl">
+
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 bg-red-600 bg-opacity-90 text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6 shadow">
+          <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+          Dealer Resmi Nissan — Purwakarta
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tight mb-5">
+          Discover Your<br>
+          <span class="text-red-400">Dream Nissan</span><br>
+          Car
+        </h1>
+
+        <!-- Sub-headline -->
+        <p class="text-gray-200 text-lg sm:text-xl font-light leading-relaxed mb-10 max-w-lg">
+          Entrust your vehicle maintenance to our certified technicians — or find your perfect Nissan from our latest lineup.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="#models"
+             class="inline-flex items-center justify-center gap-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-base px-8 py-4 rounded-xl shadow-xl hover:shadow-red-900/40 transition-all duration-200 group">
+            <svg class="w-5 h-5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+            </svg>
+            View Latest Models
+          </a>
+          <a href="tel:082219120005"
+             class="inline-flex items-center justify-center gap-2.5 bg-transparent hover:bg-white/10 text-white font-bold text-base px-8 py-4 rounded-xl border-2 border-white/60 hover:border-white transition-all duration-200">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            Book Service
+          </a>
+        </div>
+
+        <!-- Trust badges -->
+        <div class="flex flex-wrap gap-6 mt-12 pt-8 border-t border-white/15">
+          <div class="text-center">
+            <p class="text-2xl font-black text-white">15+</p>
+            <p class="text-xs text-gray-400 font-medium uppercase tracking-wide">Tahun Pengalaman</p>
+          </div>
+          <div class="w-px bg-white/15 self-stretch"></div>
+          <div class="text-center">
+            <p class="text-2xl font-black text-white">5.000+</p>
+            <p class="text-xs text-gray-400 font-medium uppercase tracking-wide">Pelanggan Puas</p>
+          </div>
+          <div class="w-px bg-white/15 self-stretch"></div>
+          <div class="text-center">
+            <p class="text-2xl font-black text-white">4</p>
+            <p class="text-xs text-gray-400 font-medium uppercase tracking-wide">Model Tersedia</p>
+          </div>
+          <div class="w-px bg-white/15 self-stretch"></div>
+          <div class="text-center">
+            <p class="text-2xl font-black text-white">Resmi</p>
+            <p class="text-xs text-gray-400 font-medium uppercase tracking-wide">Dealer Nissan</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/40 animate-bounce">
+      <span class="text-[10px] uppercase tracking-widest font-medium">Scroll</span>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       FEATURED MODELS SECTION — 3-col grid
+  ═══════════════════════════════════════════ -->
+  <section id="models" class="py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <p class="text-blue-600 font-semibold uppercase tracking-widest text-sm mb-2">Armada Terbaru</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">Model Nissan Pilihan</h2>
+        <p class="text-gray-500 mt-3 max-w-xl mx-auto">Jelajahi lineup Nissan terkini yang tersedia di Purwakarta. Tanya chatbot kami untuk info lebih lanjut.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+        <!-- Terra -->
+        <div class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
+          <img src="https://placehold.co/600x400/e2e8f0/1e293b?font=roboto&text=Foto+Nissan+Terra" alt="Nissan Terra" class="w-full h-44 object-cover">
+          <div class="p-5 flex flex-col flex-1">
+            <span class="text-xs font-semibold text-red-600 uppercase tracking-wide mb-1">SUV 7-Seater</span>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Nissan Terra</h3>
+            <ul class="text-sm text-gray-600 space-y-1">
+              <li class="flex items-center gap-2"><span class="text-red-500">✓</span> Mesin diesel &amp; bensin bertenaga</li>
+              <li class="flex items-center gap-2"><span class="text-red-500">✓</span> Kapasitas 7 penumpang</li>
+              <li class="flex items-center gap-2"><span class="text-red-500">✓</span> 4WD off-road capability</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Kicks -->
+        <div class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
+          <img src="https://placehold.co/600x400/e2e8f0/1e293b?font=roboto&text=Foto+Nissan+Kicks" alt="Nissan Kicks" class="w-full h-44 object-cover">
+          <div class="p-5 flex flex-col flex-1">
+            <span class="text-xs font-semibold text-red-600 uppercase tracking-wide mb-1">SUV Compact</span>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Nissan Kicks</h3>
+            <ul class="text-sm text-gray-600 space-y-1">
+              <li class="flex items-center gap-2"><span class="text-red-500">✓</span> Teknologi e-POWER hybrid</li>
+              <li class="flex items-center gap-2"><span class="text-red-500">✓</span> ProPILOT Assist</li>
+              <li class="flex items-center gap-2"><span class="text-red-500">✓</span> Desain sporty &amp; modern</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Livina -->
+        <div class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
+          <img src="https://placehold.co/600x400/e2e8f0/1e293b?font=roboto&text=Foto+Nissan+Livina" alt="Nissan Livina" class="w-full h-44 object-cover">
+          <div class="p-5 flex flex-col flex-1">
+            <span class="text-xs font-semibold text-red-600 uppercase tracking-wide mb-1">MPV Keluarga</span>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Nissan Livina</h3>
+            <ul class="text-sm text-gray-600 space-y-1">
+              <li class="flex items-center gap-2"><span class="text-red-500">✓</span> 7 kursi nyaman</li>
+              <li class="flex items-center gap-2"><span class="text-red-500">✓</span> Konsumsi BBM efisien</li>
+              <li class="flex items-center gap-2"><span class="text-red-500">✓</span> Kabin luas &amp; fleksibel</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Magnite -->
+        <div class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
+          <img src="https://placehold.co/600x400/e2e8f0/1e293b?font=roboto&text=Foto+Nissan+Magnite" alt="Nissan Magnite" class="w-full h-44 object-cover">
+          <div class="p-5 flex flex-col flex-1">
+            <span class="text-xs font-semibold text-red-600 uppercase tracking-wide mb-1">SUV Entry-Level</span>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Nissan Magnite</h3>
+            <ul class="text-sm text-gray-600 space-y-1">
+              <li class="flex items-center gap-2"><span class="text-red-500">✓</span> Mesin turbo bertenaga</li>
+              <li class="flex items-center gap-2"><span class="text-red-500">✓</span> Harga terjangkau</li>
+              <li class="flex items-center gap-2"><span class="text-red-500">✓</span> Fitur lengkap &amp; modern</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <p class="text-blue-600 font-semibold uppercase tracking-widest text-sm mb-2">Apa yang Kami Tawarkan</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">Layanan Kami</h2>
+        <p class="text-gray-500 mt-3 max-w-xl mx-auto">Dari perawatan rutin hingga pembelian mobil baru, kami siap melayani Anda.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+
+        <!-- Layanan Servis -->
+        <div class="bg-white rounded-2xl shadow p-8">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="bg-blue-100 p-3 rounded-xl">
+              <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800">Layanan Servis &amp; Perawatan</h3>
+          </div>
+          <ul class="space-y-3 text-gray-600">
+            <li class="flex items-center gap-3"><span class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></span>Ganti oli &amp; filter berkala</li>
+            <li class="flex items-center gap-3"><span class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></span>Tune-up mesin &amp; servis rutin</li>
+            <li class="flex items-center gap-3"><span class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></span>Perbaikan body &amp; cat (body repair)</li>
+            <li class="flex items-center gap-3"><span class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></span>Servis AC &amp; kelistrikan</li>
+            <li class="flex items-center gap-3"><span class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></span>Penggantian ban &amp; spooring</li>
+            <li class="flex items-center gap-3"><span class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></span>Diagnosis masalah kendaraan</li>
+          </ul>
+          <a href="tel:082219120005" class="mt-6 inline-block bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition text-sm">Booking Servis</a>
+        </div>
+
+        <!-- Penjualan Mobil Baru -->
+        <div class="bg-white rounded-2xl shadow p-8">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="bg-green-100 p-3 rounded-xl">
+              <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800">Penjualan Mobil Baru</h3>
+          </div>
+          <ul class="space-y-3 text-gray-600">
+            <li class="flex items-center gap-3"><span class="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></span>Test drive gratis di lokasi</li>
+            <li class="flex items-center gap-3"><span class="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></span>Simulasi kredit &amp; cicilan ringan</li>
+            <li class="flex items-center gap-3"><span class="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></span>Trade-in kendaraan lama</li>
+            <li class="flex items-center gap-3"><span class="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></span>Promo &amp; diskon spesial</li>
+            <li class="flex items-center gap-3"><span class="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></span>Konsultasi pemilihan model</li>
+            <li class="flex items-center gap-3"><span class="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></span>Proses STNK &amp; BPKB cepat</li>
+          </ul>
+          <a href="tel:082219120005" class="mt-6 inline-block bg-green-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-green-700 transition text-sm">Hubungi Sales</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / CTA Section -->
+  <section id="contact" class="py-20 bg-blue-700 text-white">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <p class="text-blue-200 font-semibold uppercase tracking-widest text-sm mb-3">Siap Membantu Anda</p>
+      <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Hubungi Kami Sekarang</h2>
+      <p class="text-blue-100 text-lg mb-8 max-w-xl mx-auto">Tim Sales &amp; Service Advisor kami siap menjawab pertanyaan Anda tentang pembelian mobil baru maupun perawatan kendaraan.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-10">
+        <a href="tel:082219120005" class="bg-white text-blue-700 font-bold px-8 py-3 rounded-xl shadow hover:bg-blue-50 transition text-lg">📞 0822-1912-0005</a>
+        <a href="https://wa.me/6282219120005" target="_blank" rel="noopener noreferrer" class="bg-green-500 text-white font-bold px-8 py-3 rounded-xl shadow hover:bg-green-400 transition text-lg">💬 WhatsApp</a>
+      </div>
+      <div class="text-blue-200 text-sm space-y-1">
+        <p>📍 Nissan Purwakarta — Dealer Resmi &amp; Service Center</p>
+        <p>Purwakarta, Jawa Barat, Indonesia</p>
+        <p>Senin – Sabtu: 08.00 – 17.00 WIB</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-8">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+      <div class="flex items-center gap-3">
+        <!-- Nissan logo inline SVG -->
+        <svg height="28" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Nissan logo">
+          <ellipse cx="100" cy="30" rx="98" ry="28" stroke="#9ca3af" stroke-width="4" fill="none"/>
+          <rect x="2" y="22" width="196" height="16" fill="#111827"/>
+          <text x="100" y="35" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="22" letter-spacing="6" fill="#9ca3af">NISSAN</text>
+        </svg>
+        <span class="font-semibold text-gray-300">Nissan Purwakarta</span>
+      </div>
+      <div class="text-center">
+        <p>Dealer Resmi &amp; Service Center Nissan di Purwakarta</p>
+        <p>Telp: <a href="tel:082219120005" class="text-blue-400 hover:underline">0822-1912-0005</a> | WhatsApp: <a href="https://wa.me/6282219120005" class="text-green-400 hover:underline">Chat Sekarang</a></p>
+      </div>
+      <p>&copy; 2026 Nissan Purwakarta. All rights reserved.</p>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════════
+       CHATBOT WIDGET — FAB + sliding panel
+  ═══════════════════════════════════════════ -->
+
+  <!-- Chat panel (hidden by default) -->
+  <div id="chatbot-widget" class="fixed bottom-24 right-6 z-50 w-80 max-w-[calc(100vw-3rem)] rounded-2xl shadow-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-300 origin-bottom-right" style="display:none;">
+    <div id="chatbot-header" class="flex items-center justify-between bg-gray-900 text-white px-4 py-3 cursor-pointer select-none">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+        <span class="font-bold text-sm">Nissan AI Chat</span>
+      </div>
+      <button id="close-chatbot" class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/20 transition text-lg leading-none" aria-label="Tutup chatbot">×</button>
+    </div>
+    <div id="chatbot-body" class="p-3">
+      <div id="sessions-list" class="sessions-list mb-2"></div>
+      <div class="flex gap-2 mb-2">
+        <button id="new-session" class="flex-1 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition text-sm">New Chat</button>
+        <button id="clear-history" class="flex items-center justify-center gap-1.5 py-2 px-3 bg-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-600 rounded-lg font-semibold transition text-sm" title="Hapus semua riwayat chat">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+          Hapus
+        </button>
+      </div>
+      <div id="chat-box" class="chat-box h-64 overflow-y-auto bg-gray-50 rounded-lg p-2 mb-2 border"></div>
+      <form id="chat-form" class="flex gap-2">
+        <input type="text" id="user-input" placeholder="Tanya tentang servis atau mobil baru..." autocomplete="off" required class="flex-1 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-400" />
+        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-700 transition text-sm">Kirim</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Floating Action Button -->
+  <button id="chatbot-fab"
+    aria-label="Buka chatbot"
+    class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-red-600 hover:bg-red-700 text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-200 flex items-center justify-center group">
+    <!-- Chat icon (shown when closed) -->
+    <svg id="fab-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+    </svg>
+    <!-- X icon (shown when open) -->
+    <svg id="fab-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
