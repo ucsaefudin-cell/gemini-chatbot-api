@@ -3,70 +3,319 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Scanner App</title>
+    <title>Smart Web Scanner Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script async src="https://docs.opencv.org/4.5.4/opencv.js" id="opencv-js"></script>
 </head>
-<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
+<body class="bg-slate-900 text-white min-h-screen flex flex-col justify-between antialiased selection:bg-blue-500">
 
-    <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex flex-col items-center">
-        <h1 class="text-2xl font-bold mb-4 text-gray-800">Scanner Dokumen</h1>
+    <header class="p-4 bg-slate-800 border-b border-slate-700 flex justify-between items-center shadow-md">
+        <h1 class="text-lg font-bold tracking-wide text-blue-400">📄 WebScanner v2.0</h1>
+        <div id="statusOpenCV" class="text-xs bg-yellow-600 px-2 py-1 rounded font-medium animate-pulse">
+            Memuat Modul Engine...
+        </div>
+    </header>
 
-        <video id="kamera" autoplay playsinline class="w-full bg-black rounded mb-4 object-cover h-72"></video>
-
-        <div class="flex gap-4 w-full">
-            <button id="btnBukaKamera" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-colors">
-                Buka Kamera
-            </button>
-            <button id="btnAmbilFoto" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition-colors hidden">
-                Ambil Foto
-            </button>
+    <main class="flex-1 flex flex-col items-center justify-center p-2 w-full max-w-md mx-auto relative overflow-hidden">
+        
+        <div id="wrapperKamera" class="w-full relative bg-black rounded-xl overflow-hidden shadow-2xl border border-slate-700 h-[60vh] flex items-center justify-center">
+            <video id="kamera" autoplay playsinline class="w-full h-full object-cover"></video>
+            <div class="absolute top-3 left-3 bg-black/60 px-3 py-1 rounded-full text-xs border border-white/20">
+                Mode: Kamera Belakang
+            </div>
         </div>
 
-        <canvas id="kanvas" class="hidden w-full mt-4 border border-gray-300 rounded shadow-sm"></canvas>
-    </div>
+        <div id="wrapperKoreksi" class="w-full hidden flex-col items-center">
+            <p class="text-sm text-center text-yellow-400 mb-2 font-medium">
+                Ketuk 4 Sudut Dokumen (Kiri Atas ➔ Kanan Atas ➔ Kanan Bawah ➔ Kiri Bawah)
+            </p>
+            <div class="relative bg-black rounded-xl overflow-hidden shadow-2xl border border-slate-700 max-w-full">
+                <canvas id="kanvasFoto" class="max-w-full h-auto block"></canvas>
+            </div>
+            <canvas id="kanvasHasil" class="hidden"></canvas>
+        </div>
+
+    </main>
+
+    <footer class="p-4 bg-slate-800 border-t border-slate-700 w-full max-w-md mx-auto rounded-t-2xl shadow-inner">
+        <div class="mb-4">
+            <p class="text-xs text-slate-400 mb-2 font-semibold">Daftar Halaman Tersimpan (<span id="jumlahHalaman">0</span>):</p>
+            <div id="containerThumbnail" class="flex gap-2 overflow-x-auto py-1 min-h-[60px] scrollbar-thin scrollbar-thumb-slate-600">
+                <span id="placeholderThumb" class="text-xs text-slate-500 italic self-center">Belum ada halaman yang diambil.</span>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-3">
+            <div id="aksiKamera" class="flex gap-2">
+                <button id="btnAmbilFoto" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition duration-200 active:scale-95 flex justify-center items-center gap-2">
+                    📸 Ambil Foto
+                </button>
+            </div>
+
+            <div id="aksiKoreksi" class="flex gap-2 hidden">
+                <button id="btnUlangFoto" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-semibold py-3 px-2 rounded-xl transition">
+                    🔄 Ulang Foto
+                </button>
+                <button id="btnLuruskan" class="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-xl transition opacity-50 cursor-not-allowed" disabled>
+                    📐 Luruskan & Simpan
+                </button>
+            </div>
+
+            <button id="btnUnduhPDF" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition hidden justify-center items-center gap-2">
+                📥 Selesai & Download PDF
+            </button>
+        </div>
+    </footer>
 
     <script>
-        // Mengambil elemen-elemen dari HTML
         const video = document.getElementById('kamera');
-        const kanvas = document.getElementById('kanvas');
-        const btnBukaKamera = document.getElementById('btnBukaKamera');
+        const kanvasFoto = document.getElementById('kanvasFoto');
+        const kanvasHasil = document.getElementById('kanvasHasil');
+        const statusOpenCV = document.getElementById('statusOpenCV');
+        
+        // Element Wrappers
+        const wrapperKamera = document.getElementById('wrapperKamera');
+        const wrapperKoreksi = document.getElementById('wrapperKoreksi');
+        const containerThumbnail = document.getElementById('containerThumbnail');
+        const placeholderThumb = document.getElementById('placeholderThumb');
+        const jumlahHalaman = document.getElementById('jumlahHalaman');
+
+        // Buttons
         const btnAmbilFoto = document.getElementById('btnAmbilFoto');
+        const btnUlangFoto = document.getElementById('btnUlangFoto');
+        const btnLuruskan = document.getElementById('btnLuruskan');
+        const btnUnduhPDF = document.getElementById('btnUnduhPDF');
 
-        let streamKamera = null;
+        // State Management
+        let daftarHalamanPDF = []; // Menampung dataURL gambar yang sudah lurus
+        let titikKoordinat = []; // Menampung 4 titik sudut pilihan user
+        let fotoAsliData = null; // Menyimpan raw image object setelah capture
+        let rasioSkala = 1; // Rasio skala gambar asli vs tampilan layar
 
-        // Fungsi untuk menyalakan kamera
-        btnBukaKamera.addEventListener('click', async () => {
+        // Cek apakah OpenCV.js sudah siap digunakan
+        var document = document || {};
+        document.getElementById('opencv-js').addEventListener('load', () => {
+            statusOpenCV.textContent = "⚡ Engine Ready";
+            statusOpenCV.classList.remove('bg-yellow-600', 'animate-pulse');
+            statusOpenCV.classList.add('bg-green-600');
+            startKamera();
+        });
+
+        // 1. Fungsi Menyalakan Kamera Otomatis
+        async function startKamera() {
             try {
-                // Meminta akses kamera ke browser. 
-                // facingMode: 'environment' menginstruksikan hp untuk memakai kamera belakang.
-                streamKamera = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment' },
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } },
                     audio: false
                 });
-                
-                // Mengalirkan data dari kamera ke tag <video>
-                video.srcObject = streamKamera;
-                
-                // Menukar tombol yang tampil
-                btnBukaKamera.classList.add('hidden');
-                btnAmbilFoto.classList.remove('hidden');
-            } catch (error) {
-                alert('Gagal mengakses kamera. Pastikan browser memiliki izin akses kamera. Error: ' + error.message);
+                video.srcObject = stream;
+            } catch (err) {
+                alert('Gagal mengakses kamera belakang: ' + err.message);
+            }
+        }
+
+        // 2. Fungsi Ambil Foto (Capture)
+        btnAmbilFoto.addEventListener('click', () => {
+            if (typeof cv === 'undefined') {
+                alert('Tunggu hingga core engine selesai dimuat!');
+                return;
+            }
+
+            // Atur dimensi kanvas pemotretan sesuai resolusi video asli
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = video.videoWidth;
+            tempCanvas.height = video.videoHeight;
+            const ctx = tempCanvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
+
+            // Simpan data gambar asli
+            fotoAsliData = new Image();
+            fotoAsliData.src = tempCanvas.toDataURL('image/jpeg', 0.9);
+            fotoAsliData.onload = function() {
+                bukaModeKoreksi();
+            };
+        });
+
+        // 3. Masuk ke Mode Penentuan Titik Perspektif
+        function bukaModeKoreksi() {
+            // Tukar tampilan UI
+            wrapperKamera.classList.add('hidden');
+            document.getElementById('aksiKamera').classList.add('hidden');
+            wrapperKoreksi.classList.remove('hidden');
+            document.getElementById('aksiKoreksi').classList.remove('hidden');
+
+            // Set ukuran kanvas display di layar HP agar pas responsif
+            const maxDisplayWidth = window.innerWidth - 24; 
+            rasioSkala = maxDisplayWidth / fotoAsliData.width;
+            if (rasioSkala > 1) rasioSkala = 1;
+
+            kanvasFoto.width = fotoAsliData.width * rasioSkala;
+            kanvasFoto.height = fotoAsliData.height * rasioSkala;
+
+            titikKoordinat = []; // Reset koordinat sudut
+            btnLuruskan.disabled = true;
+            btnLuruskan.classList.add('opacity-50', 'cursor-not-allowed');
+
+            gambarUlangKanvas();
+        }
+
+        // Fungsi menggambar ulang foto asli dan marker titik di kanvas layar
+        function gambarUlangKanvas() {
+            const ctx = kanvasFoto.getContext('2d');
+            ctx.clearRect(0, 0, kanvasFoto.width, kanvasFoto.height);
+            ctx.drawImage(fotoAsliData, 0, 0, kanvasFoto.width, kanvasFoto.height);
+
+            // Gambar marker lingkaran di setiap titik yang diketuk user
+            titikKoordinat.forEach((pt, index) => {
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, 10, 0, 2 * Math.PI);
+                ctx.fillStyle = '#3b82f6'; // Warna Biru Tailwind
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Kasih text nomor urutan pengetukan
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillText(index + 1, pt.x - 4, pt.y + 4);
+            });
+        }
+
+        // Listener Ketukan di Layar HP untuk menentukan koordinat pojok kertas
+        kanvasFoto.addEventListener('click', (e) => {
+            if (titikKoordinat.length >= 4) return; // Maksimal 4 sudut dokumen
+
+            const rect = kanvasFoto.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            titikKoordinat.push({ x: x, y: y });
+            gambarUlangKanvas();
+
+            // Jika sudah 4 sudut dipilih, aktifkan tombol Luruskan
+            if (titikKoordinat.length === 4) {
+                btnLuruskan.disabled = false;
+                btnLuruskan.classList.remove('opacity-50', 'cursor-not-allowed');
             }
         });
 
-        // Fungsi untuk menangkap frame dari video menjadi gambar diam
-        btnAmbilFoto.addEventListener('click', () => {
-            // Menyesuaikan resolusi kanvas dengan resolusi asli dari kamera
-            kanvas.width = video.videoWidth;
-            kanvas.height = video.videoHeight;
+        // 4. Eksekusi Pelurusan Gambar Menggunakan OpenCV.js
+        btnLuruskan.addEventListener('click', () => {
+            if (titikKoordinat.length !== 4) return;
+
+            // Kembalikan koordinat layar ke dimensi resolusi gambar asli yang berukuran besar
+            const srcPoints = [];
+            titikKoordinat.forEach(pt => {
+                srcPoints.push(pt.x / rasioSkala);
+                srcPoints.push(pt.y / rasioSkala);
+            });
+
+            // Definisikan estimasi ukuran kertas hasil scan lurus (misal rasio standar A4)
+            const lebarHasil = 800;
+            const tinggiHasil = 1130;
+
+            kanvasHasil.width = lebarHasil;
+            kanvasHasil.height = tinggiHasil;
+
+            // OpenCV Warp Perspective Logic
+            let srcMat = cv.imread(kanvasFoto); // Membaca citra dari kanvas visual
+            // Mengulangi pembacaan dari objek asli berskala besar agar kualitas tajam
+            let srcMatReal = cv.Mat.zeros(fotoAsliData.height, fotoAsliData.width, cv.CV_8UC4);
             
-            // "Menggambar" frame video saat ini ke dalam kanvas
-            const context = kanvas.getContext('2d');
-            context.drawImage(video, 0, 0, kanvas.width, kanvas.height);
+            // Menggunakan kanvas sementara guna mentransfer gambar asli berkekuatan penuh ke OpenCV Matrix
+            const srcTmpCanvas = document.createElement('canvas');
+            srcTmpCanvas.width = fotoAsliData.width;
+            srcTmpCanvas.height = fotoAsliData.height;
+            srcTmpCanvas.getContext('2d').drawImage(fotoAsliData, 0, 0);
+            let srcMatFull = cv.imread(srcTmpCanvas);
+
+            let dstMat = new cv.Mat();
+            let dsize = new cv.Size(lebarHasil, tinggiHasil);
+
+            // Titik asal (4 sudut yang miring)
+            let srcTri = cv.matFromArray(4, 1, cv.CV_32FC2, srcPoints);
+            // Titik tujuan (menjadi persegi panjang tegak sempurna)
+            let dstTri = cv.matFromArray(4, 1, cv.CV_32FC2, [
+                0, 0,
+                lebarHasil, 0,
+                lebarHasil, tinggiHasil,
+                0, tinggiHasil
+            ]);
+
+            // Hitung matriks transformasi perspektif
+            let M = cv.getPerspectiveTransform(srcTri, dstTri);
+            // Lakukan pemotretan & pembentangan citra miring menjadi lurus rata
+            cv.warpPerspective(srcMatFull, dstMat, M, dsize, cv.INTER_LINEAR, cv.BORDER_CONSTANT, new cv.Scalar());
             
-            // Menampilkan kanvas berisi hasil jepretan ke layar
-            kanvas.classList.remove('hidden');
+            // Render hasil akhir pemrosesan gambar lurus ke kanvas rahasia
+            cv.imshow(kanvasHasil, dstMat);
+
+            // Ambil dataURL berformat JPEG dari hasil pelurusan tersebut
+            const scannedDataURL = kanvasHasil.toDataURL('image/jpeg', 0.85);
+            daftarHalamanPDF.push(scannedDataURL);
+
+            // Bersihkan memori dari variabel OpenCV C++ core agar HP tidak melambat/crash
+            srcMat.delete(); srcMatFull.delete(); srcMatReal.delete(); dstMat.delete(); M.delete(); srcTri.delete(); dstTri.delete();
+
+            // Perbarui list preview thumbnail multi-take di baris bawah
+            updateThumbnailDOM();
+            kembaliKeKamera();
+        });
+
+        // 5. Fungsi Mengatur Render List Thumbnail Halaman Dokumen
+        function updateThumbnailDOM() {
+            if (daftarHalamanPDF.length > 0) {
+                placeholderThumb.classList.add('hidden');
+                btnUnduhPDF.classList.remove('hidden');
+                btnUnduhPDF.classList.add('flex');
+            }
+            jumlahHalaman.textContent = daftarHalamanPDF.length;
+
+            // Ambil elemen halaman yang baru disimpan saja untuk ditambahkan ke UI
+            const indexTerbaru = daftarHalamanPDF.length - 1;
+            const thumbDiv = document.createElement('div');
+            thumbDiv.className = "relative flex-shrink-0 border-2 border-blue-500 rounded-lg overflow-hidden w-12 h-16 bg-slate-700 shadow";
+            
+            const img = document.createElement('img');
+            img.src = daftarHalamanPDF[indexTerbaru];
+            img.className = "w-full h-full object-cover";
+            
+            thumbDiv.appendChild(img);
+            containerThumbnail.appendChild(thumbDiv);
+        }
+
+        // Batal mengoreksi, kembali ke mode kamera aktif
+        btnUlangFoto.addEventListener('click', kembaliKeKamera);
+
+        function kembaliKeKamera() {
+            wrapperKoreksi.classList.add('hidden');
+            document.getElementById('aksiKoreksi').classList.add('hidden');
+            wrapperKamera.classList.remove('hidden');
+            document.getElementById('aksiKamera').classList.remove('hidden');
+            fotoAsliData = null;
+        }
+
+        // 6. Fungsi Menyatukan Seluruh Gambar Menjadi 1 File PDF (Menggunakan jsPDF)
+        btnUnduhPDF.addEventListener('click', () => {
+            if (daftarHalamanPDF.length === 0) return;
+
+            const { jsPDF } = window.jspdf;
+            // set dokumen PDF berorientasi Portrait dengan satuan ukuran milimeter (mm) format kertas ukuran standar A4
+            const pdf = new jsPDF('p', 'mm', 'a4');
+
+            daftarHalamanPDF.forEach((dataURL, index) => {
+                // Jika halaman kedua dst, buat lembar halaman kosong baru terlebih dahulu
+                if (index > 0) {
+                    pdf.addPage();
+                }
+                // Gambar dibentangkan full memenuhi ukuran kertas cetak A4 (210mm x 297mm)
+                pdf.addImage(dataURL, 'JPEG', 0, 0, 210, 297);
+            });
+
+            // Unduh file dokumen final ke memori handphone
+            pdf.save('Hasil_Scan_Dokumen.pdf');
         });
     </script>
 </body>
