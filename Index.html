@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scanner App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex flex-col items-center">
+        <h1 class="text-2xl font-bold mb-4 text-gray-800">Scanner Dokumen</h1>
+
+        <video id="kamera" autoplay playsinline class="w-full bg-black rounded mb-4 object-cover h-72"></video>
+
+        <div class="flex gap-4 w-full">
+            <button id="btnBukaKamera" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-colors">
+                Buka Kamera
+            </button>
+            <button id="btnAmbilFoto" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition-colors hidden">
+                Ambil Foto
+            </button>
+        </div>
+
+        <canvas id="kanvas" class="hidden w-full mt-4 border border-gray-300 rounded shadow-sm"></canvas>
+    </div>
+
+    <script>
+        // Mengambil elemen-elemen dari HTML
+        const video = document.getElementById('kamera');
+        const kanvas = document.getElementById('kanvas');
+        const btnBukaKamera = document.getElementById('btnBukaKamera');
+        const btnAmbilFoto = document.getElementById('btnAmbilFoto');
+
+        let streamKamera = null;
+
+        // Fungsi untuk menyalakan kamera
+        btnBukaKamera.addEventListener('click', async () => {
+            try {
+                // Meminta akses kamera ke browser. 
+                // facingMode: 'environment' menginstruksikan hp untuk memakai kamera belakang.
+                streamKamera = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' },
+                    audio: false
+                });
+                
+                // Mengalirkan data dari kamera ke tag <video>
+                video.srcObject = streamKamera;
+                
+                // Menukar tombol yang tampil
+                btnBukaKamera.classList.add('hidden');
+                btnAmbilFoto.classList.remove('hidden');
+            } catch (error) {
+                alert('Gagal mengakses kamera. Pastikan browser memiliki izin akses kamera. Error: ' + error.message);
+            }
+        });
+
+        // Fungsi untuk menangkap frame dari video menjadi gambar diam
+        btnAmbilFoto.addEventListener('click', () => {
+            // Menyesuaikan resolusi kanvas dengan resolusi asli dari kamera
+            kanvas.width = video.videoWidth;
+            kanvas.height = video.videoHeight;
+            
+            // "Menggambar" frame video saat ini ke dalam kanvas
+            const context = kanvas.getContext('2d');
+            context.drawImage(video, 0, 0, kanvas.width, kanvas.height);
+            
+            // Menampilkan kanvas berisi hasil jepretan ke layar
+            kanvas.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
